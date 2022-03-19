@@ -1,0 +1,15 @@
+export PYTHONHOME=/usr # pypy?
+#export DJANGO_HOME=/home/erob/ncvs/django
+export ROOTDIR=/home/gator/src/radiocorona
+export BINDIR="$ROOTDIR/bin"
+export LIBDIR="$ROOTDIR/lib"
+
+export PYTHON=python3
+export PYTHONPATH="$ROOTDIR:$LIBDIR:$LIBDIR/site-packages"
+export PYTHONFLAGS=
+export PYTHONWARNINGS= 
+#export PATH="$PATH:$DJANGO_HOME/django/bin"
+export PYTHONIOENCODING="UTF-8"
+export PYTHONHASHSEED=random
+export DJANGO_SETTINGS_MODULE=local_settings
+export DJANGO_USE_SYSLOG=1
