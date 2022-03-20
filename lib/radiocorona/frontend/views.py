@@ -7,10 +7,10 @@ from django.http import JsonResponse, HttpResponseBadRequest, Http404, \
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.defaulttags import register
 
-from reddit.forms import SubmissionForm
-from reddit.models import Submission, Comment, Vote
-from reddit.utils.helpers import post_only
-from users.models import RedditUser
+from radiocorona.frontend.forms import SubmissionForm
+from radiocorona.frontend.models import Submission, Comment, Vote
+from radiocorona.frontend.utils.helpers import post_only
+from radiocorona.users.models import RedditUser
 
 
 @register.filter
@@ -46,7 +46,7 @@ def frontpage(request):
 
     submission_votes = {}
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         for submission in submissions:
             try:
                 vote = Vote.objects.get(

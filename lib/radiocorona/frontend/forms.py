@@ -2,8 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
-from reddit.models import Submission
-from users.models import RedditUser
+from .models import Submission
+from radiocorona.users.models import RedditUser
 
 
 class UserForm(forms.ModelForm):

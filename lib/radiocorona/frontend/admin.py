@@ -1,5 +1,5 @@
 from django.contrib import admin
-from reddit.models import Submission,Comment,Vote
+from radiocorona.frontend.models import Submission,Comment,Vote
 
 # Register your models here.
 class SubmissionInline(admin.TabularInline):

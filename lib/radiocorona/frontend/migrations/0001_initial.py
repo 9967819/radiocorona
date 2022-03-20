@@ -34,14 +34,15 @@ class Migration(migrations.Migration):
                 ('rght', models.PositiveIntegerField(db_index=True, editable=False)),
                 ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),
                 ('level', models.PositiveIntegerField(db_index=True, editable=False)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.RedditUser')),
-                ('parent', mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='reddit.Comment')),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, 
+                    to='users.RedditUser')),
+                ('parent', mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='frontend.Comment')),
             ],
             options={
                 'abstract': False,
             },
             managers=[
-                ('_default_manager', django.db.models.manager.Manager()),
+                ('objects', django.db.models.manager.Manager()),
             ],
         ),
         migrations.CreateModel(
@@ -58,7 +59,8 @@ class Migration(migrations.Migration):
                 ('score', models.IntegerField(default=0)),
                 ('timestamp', models.DateTimeField(default=django.utils.timezone.now)),
                 ('comment_count', models.IntegerField(default=0)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.RedditUser')),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, 
+                    to='users.RedditUser')),
             ],
             options={
                 'abstract': False,
@@ -70,14 +72,16 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('vote_object_id', models.PositiveIntegerField()),
                 ('value', models.IntegerField(default=0)),
-                ('submission', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='reddit.Submission')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.RedditUser')),
+                ('submission', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, 
+                    to='frontend.Submission')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, 
+                    to='users.RedditUser')),
                 ('vote_object_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType')),
             ],
         ),
         migrations.AddField(
             model_name='comment',
             name='submission',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='reddit.Submission'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='frontend.Submission'),
         ),
     ]
