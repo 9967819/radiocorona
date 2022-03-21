@@ -20,6 +20,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.frontpage, name="frontpage"),
     url(r'^comments/(?P<thread_id>[0-9]+)$', views.comments, name="thread"),
+    url(r'^comments/(?P<thread_id>[0-9]+)/edit/$', views.edit_submission, name="edit_submission"),
     url(r'^submit/$', views.submit, name="submit"),
     url(r'^post/comment/$', views.post_comment, name="post_comment"),
     url(r'^vote/$', views.vote, name="vote"),

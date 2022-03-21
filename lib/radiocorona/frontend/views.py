@@ -12,6 +12,10 @@ from radiocorona.frontend.models import Submission, Comment, Vote
 from radiocorona.frontend.utils.helpers import post_only
 from radiocorona.users.models import RedditUser
 
+import os
+
+
+from django.db import models
 
 @register.filter
 def get_item(dictionary, key):  # pragma: no cover
@@ -46,7 +50,7 @@ def frontpage(request):
 
     submission_votes = {}
 
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and not request.user.is_superuser:
         for submission in submissions:
             try:
                 vote = Vote.objects.get(
@@ -77,7 +81,7 @@ def comments(request, thread_id=None):
 
     thread_comments = Comment.objects.filter(submission=this_submission)
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         try:
             reddit_user = RedditUser.objects.get(user=request.user)
         except RedditUser.DoesNotExist:
@@ -115,9 +119,32 @@ def comments(request, thread_id=None):
                    'sub_vote'     : sub_vote_value})
 
 
+def edit_submission(request, thread_id=None):
+    this_submission = get_object_or_404(Submission, id=thread_id)
+    if request.user.username == this_submission.author_name:
+        if request.method == 'POST':
+            form = SubmissionForm(request.POST, request.FILES, instance=this_submission)
+            if form.is_valid():
+                s = form.save()
+                if 'image' in form.cleaned_data:
+                    new_image = form.cleaned_data['image']
+                    if new_image:
+                        this_submission.meta_image = new_image
+                s.generate_html()
+                this_submission.save()
+                messages.success(request, 'Submission updated.')
+        form = SubmissionForm(instance=this_submission)
+        return render(request, 'public/edit.html',
+                {'form' : form})
+    else:
+        # User not allow to edit stuff
+        return HttpResponseForbidden("You are not authorized to edit this!")
+
+    
+
 @post_only
 def post_comment(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return JsonResponse({'msg': "You need to log in to post new comments."})
 
     parent_type = request.POST.get('parentType', None)
@@ -166,7 +193,7 @@ def vote(request):
     # client side by the javascript instead of waiting for a refresh.
     vote_diff = 0
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponseForbidden()
     else:
         user = RedditUser.objects.get(user=request.user)
@@ -243,10 +270,12 @@ def submit(request):
     submission_form = SubmissionForm()
 
     if request.method == 'POST':
-        submission_form = SubmissionForm(request.POST)
+        submission_form = SubmissionForm(request.POST, request.FILES)
         if submission_form.is_valid():
             submission = submission_form.save(commit=False)
             submission.generate_html()
+            if 'image' in submission_form.cleaned_data:
+                submission.meta_image = submission_form.cleaned_data['image']
             user = User.objects.get(username=request.user)
             redditUser = RedditUser.objects.get(user=user)
             submission.author = redditUser

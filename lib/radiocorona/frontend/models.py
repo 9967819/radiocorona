@@ -4,15 +4,25 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
+
 from mptt.models import MPTTModel, TreeForeignKey
 
 from radiocorona.frontend.utils.model_utils import ContentTypeAware, MttpContentTypeAware
 
+class Category(ContentTypeAware):
+    name = models.CharField(max_length=250)
+    description = models.TextField(max_length=1000, blank=True)
 
+    class Meta:
+        verbose_name_plural = "categories"
+    
+    def __unicode__(self):
+        return "<Category:{}>".format(self.name)
 
 class Submission(ContentTypeAware):
     author_name = models.CharField(null=False, max_length=12)
-    author = models.ForeignKey('users.RedditUser', on_delete=models.CASCADE)
+    author = models.ForeignKey('users.RedditUser', on_delete=models.PROTECT)
     title = models.CharField(max_length=250)
     url = models.URLField(null=True, blank=True)
     text = models.TextField(max_length=5000, blank=True)
@@ -22,6 +32,9 @@ class Submission(ContentTypeAware):
     score = models.IntegerField(default=0)
     timestamp = models.DateTimeField(default=timezone.now)
     comment_count = models.IntegerField(default=0)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=True, null=True)
+    
+    meta_image = models.ImageField(upload_to=settings.UPLOAD_DIR, max_length=255, blank=True, null=True)
 
     def generate_html(self):
         if self.text:

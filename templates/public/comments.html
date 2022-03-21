@@ -23,8 +23,11 @@
                 <a class="thread-title" href="{{ submission.linked_url }}">{{ submission.title }}</a>
                 <br>
                 <h6 class="thread-info">submitted {{ submission.timestamp|naturaltime }} by <a
-                        href="/user/{{ submission.author_name }}">{{ submission.author_name }}</a></h6>
+                        href="/{{ submission.author_name }}">{{ submission.author_name }}</a></h6>
                 {{ submission.text_html|safe }}
+                {% if submission.meta_image %}
+                <img src="{{ submission.meta_image.url }}" height="500px" />
+                {% endif %}
                 <ul class="buttons">
                     <li><a href="{{ submission.comments_url }}">{{ submission.comment_count }} comments</a></li>
                 </ul>

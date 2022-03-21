@@ -118,6 +118,8 @@ class SubmissionForm(forms.ModelForm):
         max_length=5000,
         required=False)
 
+    image = forms.ImageField(required=False)
+
     class Meta:
         model = Submission
-        fields = ('title', 'url', 'text')
+        fields = ('title', 'url', 'text', 'image')

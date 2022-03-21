@@ -77,7 +77,7 @@ def user_logout(request):
     Log out user if one is logged in and redirect them to frontpage.
     """
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         redirect_page = request.POST.get('current_page', '/')
         logout(request)
         messages.success(request, 'Logged out!')

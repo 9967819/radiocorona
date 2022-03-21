@@ -1,7 +1,11 @@
 from django.contrib import admin
-from radiocorona.frontend.models import Submission,Comment,Vote
+from radiocorona.frontend.models import Submission,Comment,Vote,Category
 
 # Register your models here.
+
+class CategoryInline(admin.TabularInline):
+    model = Category
+
 class SubmissionInline(admin.TabularInline):
     model = Submission
     max_num = 10
@@ -17,3 +21,4 @@ class SubmissionAdmin(admin.ModelAdmin):
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(Comment)
 admin.site.register(Vote)
+admin.site.register(Category)
