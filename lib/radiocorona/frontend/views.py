@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.defaulttags import register
 
 from radiocorona.frontend.forms import SubmissionForm
-from radiocorona.frontend.models import Submission, Comment, Vote
+from radiocorona.frontend.models import Submission, Comment, Vote, Category
 from radiocorona.frontend.utils.helpers import post_only
 from radiocorona.users.models import RedditUser
 
@@ -38,7 +38,7 @@ def frontpage(request):
     # TODO: Serve user votes on submissions too.
 
     all_submissions = Submission.objects.order_by('-score').all()
-    paginator = Paginator(all_submissions, 25)
+    paginator = Paginator(all_submissions, 5)
 
     page = request.GET.get('page', 1)
     try:
@@ -64,6 +64,25 @@ def frontpage(request):
     return render(request, 'public/frontpage.html', {'submissions'     : submissions,
                                                      'submission_votes': submission_votes})
 
+def category(request, slug):
+    category = get_object_or_404(Category, name=slug.title())
+    submissions = category.submission_set.order_by('-score').all()
+    if not submissions:
+        return submit(request, category=category)
+
+    submission_votes = {}
+    for submission in submissions:
+            try:
+                vote = Vote.objects.get(
+                    vote_object_type=submission.get_content_type(),
+                    vote_object_id=submission.id,
+                    user=RedditUser.objects.get(user=request.user))
+                submission_votes[submission.id] = vote.value
+            except Vote.DoesNotExist:
+                pass
+
+    return render(request, 'public/category.html', {'submissions' : submissions,
+            'submission_votes' : submission_votes})
 
 def comments(request, thread_id=None):
     """
@@ -263,11 +282,15 @@ def vote(request):
 
 
 @login_required
-def submit(request):
+def submit(request, category=None):
     """
     Handles new submission.. submission.
     """
-    submission_form = SubmissionForm()
+    if category is not None:
+        submission_form = SubmissionForm(initial={
+            'category':category})
+    else:
+        submission_form = SubmissionForm()
 
     if request.method == 'POST':
         submission_form = SubmissionForm(request.POST, request.FILES)

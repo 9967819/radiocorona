@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -14,7 +14,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
             <ul class="nav navbar-nav">
                 <li><a href="{% url 'frontpage' %}">Home</a></li>
-                <li><a href="{% url 'submit' %}">Submit</a></li>
+                <li><a href="{% url 'submit' %}"><strong>Submit</strong></a></li>
+                {% for category in all_categories %}
+                <li><a href="{{ category.url }}">{{ category.name }}</a></li>
+                {% endfor %}
             </ul>
 
             <ul class="nav navbar-nav navbar-right ">
@@ -24,7 +27,7 @@
                             {{ user }}
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="/user/{{ user }}">Profile</a></li>
+                            <li><a href="/{{ user }}">Profile</a></li>
                             <li class="disabled"><a href="#">Messages <span class="badge">0</span></a></li>
                             <li class="divider"></li>
                             <li>

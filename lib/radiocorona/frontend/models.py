@@ -17,8 +17,11 @@ class Category(ContentTypeAware):
     class Meta:
         verbose_name_plural = "categories"
     
-    def __unicode__(self):
-        return "<Category:{}>".format(self.name)
+    def __str__(self):
+        return "<Category: %s>" % self.name
+
+    def url(self):
+        return "/category/%s" % self.name.lower()
 
 class Submission(ContentTypeAware):
     author_name = models.CharField(null=False, max_length=12)

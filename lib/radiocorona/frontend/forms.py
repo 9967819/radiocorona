@@ -4,7 +4,9 @@ from django.core.validators import RegexValidator
 
 from .models import Submission
 from radiocorona.users.models import RedditUser
+from radiocorona.frontend.models import Category
 
+categories = Category.objects.all()
 
 class UserForm(forms.ModelForm):
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z_]*$',
@@ -120,6 +122,8 @@ class SubmissionForm(forms.ModelForm):
 
     image = forms.ImageField(required=False)
 
+    category = forms.ModelChoiceField(queryset=categories, required=False)
+
     class Meta:
         model = Submission
-        fields = ('title', 'url', 'text', 'image')
+        fields = ('title', 'url', 'text', 'image', 'category')

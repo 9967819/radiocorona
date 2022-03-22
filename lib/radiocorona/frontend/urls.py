@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^submit/$', views.submit, name="submit"),
     url(r'^post/comment/$', views.post_comment, name="post_comment"),
     url(r'^vote/$', views.vote, name="vote"),
+    url(r'^category/(?P<slug>[\w]+)$', views.category, name="category")
 
 ]
