@@ -23,8 +23,8 @@
                     </div>
                 </td>
                 <td class="info-container">
-                    <div>
-                        <p><a class="thread-title" href="{{ submission.linked_url }}">{{ submission.title }}</a></p>
+                    <div class="card">
+                        <div class="card-header"><a class="thread-title" href="{{ submission.linked_url }}">{{ submission.title }}</a></div>
                         {% if submission.meta_image %}
                         <img src="{{ submission.meta_image.url }}" height="300px"/>
                         {% endif %}

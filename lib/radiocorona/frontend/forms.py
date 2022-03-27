@@ -107,16 +107,16 @@ class SubmissionForm(forms.ModelForm):
                'placeholder': "Submission title"}),
         required=True, min_length=1, max_length=250)
 
-    url = forms.URLField(widget=forms.URLInput(
-        attrs={'class': "form-control",
-               'placeholder': "(Optional) http:///www.example.com"}),
-        required=False)
+    #url = forms.URLField(widget=forms.URLInput(
+    #    attrs={'class': "form-control",
+    #           'placeholder': "(Optional) http:///www.example.com"}),
+    #    required=False)
 
     text = forms.CharField(widget=forms.Textarea(
         attrs={
             'class': "form-control",
             'rows': "3",
-            'placeholder': "Optional text"}),
+            'placeholder': "What's happening?"}),
         max_length=5000,
         required=False)
 
@@ -126,4 +126,4 @@ class SubmissionForm(forms.ModelForm):
 
     class Meta:
         model = Submission
-        fields = ('title', 'url', 'text', 'image', 'category')
+        fields = ('title', 'text', 'image', 'category')

@@ -69,7 +69,9 @@ def category(request, slug):
     submissions = category.submission_set.order_by('-score').all()
     if not submissions:
         return submit(request, category=category)
-
+    
+    submission_form = SubmissionForm()
+    submission_form.initial = {'category': category}
     submission_votes = {}
     for submission in submissions:
             try:
@@ -82,7 +84,8 @@ def category(request, slug):
                 pass
 
     return render(request, 'public/category.html', {'submissions' : submissions,
-            'submission_votes' : submission_votes})
+            'submission_votes' : submission_votes, 
+            'form' : submission_form })
 
 def comments(request, thread_id=None):
     """
@@ -130,7 +133,6 @@ def comments(request, thread_id=None):
                 comment_votes[vote.vote_object.id] = vote.value
         except:
             pass
-
     return render(request, 'public/comments.html',
                   {'submission'   : this_submission,
                    'comments'     : thread_comments,

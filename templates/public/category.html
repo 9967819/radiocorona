@@ -62,4 +62,16 @@
         </ul>
     </nav>
 
+    {% include "public/submit_form.html" %} 
+
+
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script> 
+<script>
+    $(document).ready(function(){
+            $('#id_text').summernote();
+    });
+</script>
 {% endblock %}
