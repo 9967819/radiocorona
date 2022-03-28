@@ -6,6 +6,8 @@ from .models import Submission
 from radiocorona.users.models import RedditUser
 from radiocorona.frontend.models import Category
 
+from captcha.fields import ReCaptchaField
+
 categories = Category.objects.all()
 
 class UserForm(forms.ModelForm):
@@ -30,9 +32,11 @@ class UserForm(forms.ModelForm):
         min_length=4,
         required=True)
 
+    captcha = ReCaptchaField()
+
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'captcha')
 
 
 class ProfileForm(forms.ModelForm):

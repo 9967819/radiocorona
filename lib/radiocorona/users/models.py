@@ -17,7 +17,7 @@ class RedditUser(models.Model):
     about_html = models.TextField(blank=True, null=True, default=None)
     gravatar_hash = models.CharField(max_length=32, null=True, blank=True,
                                      default=None)
-    display_picture = models.NullBooleanField(default=False)
+    display_picture = models.BooleanField(default=False, null=True)
     homepage = models.URLField(null=True, blank=True, default=None)
     twitter = models.CharField(null=True, blank=True, max_length=15,
                                default=None)

@@ -78,7 +78,8 @@ def category(request, slug):
                 vote = Vote.objects.get(
                     vote_object_type=submission.get_content_type(),
                     vote_object_id=submission.id,
-                    user=RedditUser.objects.get(user=request.user))
+                    #user=RedditUser.objects.get(user=request.user))
+                    )
                 submission_votes[submission.id] = vote.value
             except Vote.DoesNotExist:
                 pass
